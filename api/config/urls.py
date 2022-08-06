@@ -11,6 +11,9 @@ from drf_spectacular.views import (
     SpectacularSwaggerView
 )
 
+# Utilities
+from api.utilities.date_difference_api import DateDifferenceCalculatorApiView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -19,5 +22,11 @@ urlpatterns = [
     path('api/schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 
     # Users
-    path('', include(('api.users.urls', 'users'), namespace='users')),
+    path('users/', include(('api.users.urls', 'users'), namespace='users')),
+
+    # Security
+    path('security/', include(('api.security.urls', 'security'), namespace='security')),
+
+    # Utilities
+    path('difference/<str:initial_date>/<str:final_date>/', DateDifferenceCalculatorApiView.as_view(), name='date-difference'),
 ]

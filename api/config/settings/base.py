@@ -6,6 +6,8 @@ from pathlib import Path
 
 import os
 
+from datetime import timedelta
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -32,6 +34,8 @@ THIRD_PARTY_APPS = [
     # Django REST Framework
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
+    'django_filters',
 
     # Django Extensions
     'django_extensions',
@@ -40,7 +44,8 @@ THIRD_PARTY_APPS = [
     'drf_spectacular',
 ]
 LOCAL_APPS = [
-    'api.users'
+    'api.users',
+    'api.security'
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -52,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'api.security.middlewares.APILoggerMiddleware'
 ]
 
 ROOT_URLCONF = 'api.config.urls'
@@ -108,6 +114,14 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
 # Default primary key field type
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -119,9 +133,12 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
