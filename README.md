@@ -21,9 +21,6 @@ In order to test this API, open the project's main folder (with your virtual env
 
 ## Running in local
 If you want to run this code in local:
-- Clone this repository.
-- Change line 9 in manage.py file to:
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.config.settings.development')
-- Change line 14 in api/config/wsgi.py file to:
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.config.settings.development')
-- Enjoy.
+- Clone this repository
+- Install the dependencies in requirements.txt
+- Run.
